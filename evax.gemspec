@@ -9,7 +9,12 @@ Gem::Specification.new do |s|
   s.email       = ["fguillen.mail@gmail.com", "juanjicho@gmail.com "]
   s.homepage    = ""
   s.summary     = "Very simple assets compressor"
-  s.description = "Very simple assets compressor"
+  s.description = <<-EOS
+    Evax is a simple asset packaging library for Ruby,
+    providing JavaScript/CSS concatenation and compression
+    using UglifyJS and a really simple regex based CSS
+    compressor. Just because enough is enough.
+  EOS
 
   s.rubyforge_project = "evax"
   
