@@ -15,4 +15,4 @@ if( ARGV.size < 2 )
   exit 1
 end
 
-Evax.new( ARGV[0], ARGV[1] )
+Evax.new( ARGV[0], ARGV[1] ).build

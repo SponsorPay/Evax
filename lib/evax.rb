@@ -10,6 +10,9 @@ class Evax
   def initialize( config_file, relative_path )
     @config_file   = config_file
     @relative_path = relative_path
+    
+    puts "[Evax] Config File: #{config_file}"
+    puts "[Evax] Relative Path: #{relative_path}"
   end
 
   def config
@@ -47,10 +50,12 @@ class Evax
   
   def write_output( file_name, string )
     path = File.expand_path( File.join( relative_path, config['output_path'] ) )
+    file_path = File.join( path, file_name )
+    
+    puts "[Evax] Writting file: #{file_path}"
     
     FileUtils.mkdir_p path
-    
-    File.open( File.join( path, file_name ), 'w') { |f| f.write string }
+    File.open( file_path, 'w') { |f| f.write string }
   end
 
   def self.compress_js( js_string )
