@@ -17,13 +17,27 @@ class EvaxTest < Test::Unit::TestCase
     assert_equal( 2, evax.config["javascripts"].size )
   end
 
+  def test_join
+    evax = Evax.new( "#{FIXTURES}/assets.yml", "wadus" )
+
+    [
+      "wadus/test/fixtures/javascripts/one.js",
+      "wadus/test/fixtures/javascripts/two.js",
+      "wadus/test/fixtures/javascripts/three.js"
+    ].each do |path|
+      File.expects( :read ).with( path )
+    end
+
+    evax.join( :javascripts, "js_one" )
+  end
+
   def test_join_js_files
-    evax = Evax.new( "#{FIXTURES}/assets.yml", nil )
+    evax = Evax.new( "#{FIXTURES}/assets.yml", "#{File.dirname(__FILE__)}/.." )
     assert_equal File.read("#{FIXTURES}/js_one.js"), evax.join( :javascripts, "js_one" )
   end
 
   def test_join_css_files
-    evax = Evax.new( "#{FIXTURES}/assets.yml", nil )
+    evax = Evax.new( "#{FIXTURES}/assets.yml", "#{File.dirname(__FILE__)}/.." )
 
     assert_equal File.read("#{FIXTURES}/css_one.css"), evax.join( :stylesheets, "css_one" )
   end

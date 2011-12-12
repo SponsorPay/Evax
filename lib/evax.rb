@@ -10,7 +10,7 @@ class Evax
   def initialize( config_file, relative_path )
     @config_file   = config_file
     @relative_path = relative_path
-    
+
     puts "[Evax] Config File: #{config_file}"
     puts "[Evax] Relative Path: #{relative_path}"
   end
@@ -21,7 +21,7 @@ class Evax
 
   def join( type, group_name )
     config[type.to_s][group_name].map do |file_path|
-      File.read file_path
+      File.read( File.join(relative_path, file_path) )
     end.join( "\n" )
   end
 
@@ -47,13 +47,13 @@ class Evax
       write_output( "#{group_name}.css", compress_string )
     end
   end
-  
+
   def write_output( file_name, string )
     path = File.expand_path( File.join( relative_path, config['output_path'] ) )
     file_path = File.join( path, file_name )
-    
-    puts "[Evax] Writting file: #{file_path}"
-    
+
+    puts "[Evax] Writing file: #{file_path}"
+
     FileUtils.mkdir_p path
     File.open( file_path, 'w') { |f| f.write string }
   end
