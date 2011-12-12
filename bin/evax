@@ -1,0 +1,18 @@
+#!/usr/bin/env ruby
+
+# Use:
+#     evax /path/to/assets.yml /relative/path
+
+begin
+  require 'evax'
+rescue LoadError
+  require 'rubygems'
+  require 'evax'
+end
+
+if( ARGV.size < 2 )
+  puts "use: $ evax <config_file_path> <relative_path>"
+  exit 1
+end
+
+Evax.new( ARGV[0], ARGV[1] ).build

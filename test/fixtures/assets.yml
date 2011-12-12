@@ -1,0 +1,17 @@
+output_path: tmp/
+
+javascripts:
+  js_one:
+    - test/fixtures/javascripts/one.js
+    - test/fixtures/javascripts/two.js
+    - test/fixtures/javascripts/three.js
+  js_two:
+    - test/fixtures/javascripts/four.js
+    
+stylesheets:
+  css_one:
+    - test/fixtures/stylesheets/one.css
+    - test/fixtures/stylesheets/two.css
+  css_two:
+    - test/fixtures/stylesheets/three.css
+    - test/fixtures/stylesheets/four.css
