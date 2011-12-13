@@ -4,11 +4,15 @@ require "uglifier"
 require_relative "evax/version"
 require_relative "evax/css_minifier"
 require_relative "evax/logger"
+require_relative "evax/railtie"
 
 class Evax
+  DEFAULT_CONFIG_FILE   = "config/assets.yml"
+  DEFAULT_RELATIVE_PATH = "public/assets"
+
   attr_reader :config_file, :relative_path
 
-  def initialize( config_file = "config/assets.yml", relative_path = "public/assets" )
+  def initialize( config_file = DEFAULT_CONFIG_FILE, relative_path = DEFAULT_RELATIVE_PATH )
     @config_file   = File.expand_path( config_file )
     @relative_path = File.expand_path( relative_path )
 
