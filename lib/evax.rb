@@ -3,16 +3,17 @@ require "uglifier"
 
 require_relative "evax/version"
 require_relative "evax/css_minifier"
+require_relative "evax/logger"
 
 class Evax
   attr_reader :config_file, :relative_path
 
-  def initialize( config_file, relative_path )
-    @config_file   = config_file
-    @relative_path = relative_path
+  def initialize( config_file = "config/assets.yml", relative_path = "public/assets" )
+    @config_file   = File.expand_path( config_file )
+    @relative_path = File.expand_path( relative_path )
 
-    puts "[Evax] Config File: #{config_file}"
-    puts "[Evax] Relative Path: #{relative_path}"
+    Evax::Logger.log "Config File: #{self.config_file}"
+    Evax::Logger.log "Relative Path: #{self.relative_path}"
   end
 
   def config
@@ -52,7 +53,7 @@ class Evax
     path = File.expand_path( File.join( relative_path, config['output_path'] ) )
     file_path = File.join( path, file_name )
 
-    puts "[Evax] Writing file: #{file_path}"
+    Evax::Logger.log "Writing file: #{file_path}"
 
     FileUtils.mkdir_p path
     File.open( file_path, 'w') { |f| f.write string }
