@@ -11,7 +11,7 @@ rescue LoadError
 end
 
 if ( ARGV.size < 2 )
-  puts "use: $ evax <config_file_path> <relative_path>"
+  Evax::Logger.log "use: $ evax <config_file_path> <relative_path>"
   exit 1
 end
 

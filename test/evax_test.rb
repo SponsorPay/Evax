@@ -1,29 +1,29 @@
-require 'test/unit'
-require "mocha"
-require_relative "../lib/evax.rb"
-
-FIXTURES = "#{File.dirname(__FILE__)}/fixtures"
+require_relative "test_helper"
 
 class EvaxTest < Test::Unit::TestCase
+  def setup
+    Evax::Logger.stubs( :log )
+  end
+
   def test_initialize
-    evax = Evax.new( "wadus", "tradus" )
-    assert_equal( "wadus", evax.config_file )
-    assert_equal( "tradus", evax.relative_path )
+    evax = Evax.new( "/wadus", "/tradus" )
+    assert_match( "/wadus", evax.config_file )
+    assert_match( "/tradus", evax.relative_path )
   end
 
   def test_read_config_file
-    evax = Evax.new( "#{FIXTURES}/assets.yml", nil )
+    evax = Evax.new( "#{FIXTURES}/assets.yml")
     assert_equal( "tmp/", evax.config["output_path"] )
     assert_equal( 2, evax.config["javascripts"].size )
   end
 
   def test_join
-    evax = Evax.new( "#{FIXTURES}/assets.yml", "wadus" )
+    evax = Evax.new( "#{FIXTURES}/assets.yml", "/wadus" )
 
     [
-      "wadus/test/fixtures/javascripts/one.js",
-      "wadus/test/fixtures/javascripts/two.js",
-      "wadus/test/fixtures/javascripts/three.js"
+      "/wadus/test/fixtures/javascripts/one.js",
+      "/wadus/test/fixtures/javascripts/two.js",
+      "/wadus/test/fixtures/javascripts/three.js"
     ].each do |path|
       File.expects( :read ).with( path )
     end
@@ -80,7 +80,7 @@ class EvaxTest < Test::Unit::TestCase
   end
 
   def test_build
-    evax = Evax.new( nil, nil )
+    evax = Evax.new
     evax.expects( :build_js )
     evax.expects( :build_css )
 

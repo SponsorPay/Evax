@@ -18,11 +18,12 @@ Gem::Specification.new do |s|
 
   s.rubyforge_project = "evax"
   
-  s.add_development_dependency "bundler", ">= 1.0.0.rc.6"
-  s.add_development_dependency "rake"
-  s.add_development_dependency "uglifier"
+  s.add_development_dependency "bundler",   ">= 1.0.0.rc.6"
+  s.add_development_dependency "rake",      "0.9.2.2"
+  s.add_development_dependency "mocha",     "0.10.0"
+  s.add_development_dependency "delorean",  "1.1.1"
   
-  s.add_development_dependency "mocha"
+  s.add_dependency "uglifier",  "1.1.0"
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
