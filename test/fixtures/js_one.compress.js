@@ -1,1 +1,1 @@
-function a(){}function b(){}function c(){}
+function js_one(){}function js_two(){}function js_three(){}

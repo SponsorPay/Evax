@@ -60,11 +60,7 @@ class Evax
   end
 
   def self.compress_js( js_string )
-    opts = {
-      :max_line_length  => 1024,
-      :toplevel         => true,
-      :copyright        => false
-    }
+    opts = { :copyright => false }
     Uglifier.compile( js_string, opts )
   end
 
