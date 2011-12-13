@@ -1,3 +1,5 @@
+# inspired by: http://www.benengebreth.org/2010/01/minimizing-css-files-with-ruby
+
 module Evax::CssMinifier
 
   def self.build(css_string)
