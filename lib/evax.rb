@@ -50,13 +50,13 @@ class Evax
   end
 
   def write_output( file_name, string )
-    path = File.expand_path( File.join( relative_path, config['output_path'] ) )
+    path      = File.expand_path( File.join( relative_path, config['output_path'] ) )
     file_path = File.join( path, file_name )
 
     Evax::Logger.log "Writing file: #{file_path}"
 
     FileUtils.mkdir_p path
-    File.open( file_path, 'w') { |f| f.write string }
+    File.open( file_path, 'w' ) { |f| f.write string }
   end
 
   def self.compress_js( js_string )
