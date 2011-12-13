@@ -1,4 +1,4 @@
-# Evax Compressor
+# Evax Assets Compressor
 
 ![Evax compressor logo](http://farm8.staticflickr.com/7166/6505430865_1f9f232e8c_o_d.png)
 *Evax compressor make you feel lighter*
@@ -50,8 +50,8 @@ Create a Rake task for running it, e.g.:
     namespace :evax do
       desc 'Build assets'
       task :build do
-        ASSETS_PATH   = config/assets.yml
-        RELATIVE_PATH = public/assets
+        ASSETS_PATH   = "#{Rails.root}/config/assets.yml"
+        RELATIVE_PATH = Rails.root
         Evax.new( ASSETS_PATH, RELATIVE_PATH ).build
       end
     end
