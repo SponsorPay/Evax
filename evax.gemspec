@@ -6,8 +6,8 @@ Gem::Specification.new do |s|
   s.name        = "evax"
   s.version     = Evax::VERSION
   s.authors     = ["Fernando Guillen", "Juan Vidal"]
-  s.email       = ["fguillen.mail@gmail.com", "juanjicho@gmail.com "]
-  s.homepage    = ""
+  s.email       = ["fguillen.mail@gmail.com", "juanjicho@gmail.com"]
+  s.homepage    = "https://github.com/SponsorPay/Evax"
   s.summary     = "Very simple assets compressor"
   s.description = <<-EOS
     Evax is a simple asset packaging library for Ruby,
