@@ -1,0 +1,10 @@
+output_path: tmp/
+
+javascripts:
+  js_one:
+    - test/fixtures/javascripts/one.js
+    - test/fixtures/javascripts/two.js
+    - test/fixtures/javascripts/three.js
+  js_two:
+    - test/fixtures/javascripts/four.js
+
