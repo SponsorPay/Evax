@@ -4,7 +4,7 @@ require "uglifier"
 require_relative "evax/version"
 require_relative "evax/css_minifier"
 require_relative "evax/logger"
-require_relative "evax/railtie"
+require_relative "evax/railtie" if defined? Rails::Railtie
 
 class Evax
   DEFAULT_CONFIG_FILE   = "config/assets.yml"
