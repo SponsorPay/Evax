@@ -27,8 +27,8 @@ class Evax
   end
 
   def build
-    build_js
-    build_css
+    build_js  if js_configured?
+    build_css if css_configured?
   end
 
   def build_js
@@ -66,6 +66,16 @@ class Evax
 
   def self.compress_css( css_string )
     Evax::CssMinifier.build( css_string )
+  end
+
+  private
+
+  def js_configured?
+    !config["javascripts"].nil?
+  end
+
+  def css_configured?
+    !config["stylesheets"].nil?
   end
 
 end
