@@ -1,10 +1,13 @@
-# Evax Compressor
+# Evax Assets Compressor
+
+![Evax compressor logo](http://farm8.staticflickr.com/7166/6505430865_1f9f232e8c_o_d.png)
+*Evax compressor make you feel lighter*
 
 Evax is a simple asset packaging library for Ruby, providing JavaScript/CSS concatenation and compression using UglifyJS and a really simple regex based CSS compressor. Just because enough is enough.
 
-The idea behind it is to have a really simple library to compress your assets in the simplest way without any weird dependency. There are nice assets packaging systems out there but they have too many options for some cases. Sometimes, you just want to play with a pet project.
+The idea behind it is to have a really **simple library to compress your assets** in the simplest way without any weird dependency (who said Java?). There are nice assets packaging systems out there but they have too many options for some cases. Sometimes, you just want to play with a pet project.
 
-Create a YAML file describing assets, Evax will take it and compress the javascript and stylesheets files to the output directory of your choice. Done.
+Create a YAML file describing assets, Evax will take it and compress the javascript and stylesheets files to the *output directory* of your choice. Done.
 
 ## Instalation
 
@@ -47,8 +50,8 @@ Create a Rake task for running it, e.g.:
     namespace :evax do
       desc 'Build assets'
       task :build do
-        ASSETS_PATH   = /path/to/assets.yml
-        RELATVE_PATH  = /relative/path
-        Evax.new(ASSETS_PATH, RELATVE_PATH).build
+        ASSETS_PATH   = "#{Rails.root}/config/assets.yml"
+        RELATIVE_PATH = Rails.root
+        Evax.new( ASSETS_PATH, RELATIVE_PATH ).build
       end
     end
