@@ -64,7 +64,7 @@ class EvaxTest < Test::Unit::TestCase
   end
 
   def test_build_js
-    evax = Evax.new( "#{FIXTURES}/assets.yml",  "#{File.dirname(__FILE__)}/.." )
+    evax = Evax.new( "#{FIXTURES}/assets.yml", "#{File.dirname(__FILE__)}/.." )
     evax.expects( :write_output ).with( "js_one.js", File.read( "#{FIXTURES}/js_one.compress.js" ) )
     evax.expects( :write_output ).with( "js_two.js", File.read( "#{FIXTURES}/js_two.compress.js" ) )
 
@@ -72,15 +72,33 @@ class EvaxTest < Test::Unit::TestCase
   end
 
   def test_build_css
-    evax = Evax.new( "#{FIXTURES}/assets.yml",  "#{File.dirname(__FILE__)}/.." )
+    evax = Evax.new( "#{FIXTURES}/assets.yml", "#{File.dirname(__FILE__)}/.." )
     evax.expects( :write_output ).with( "css_one.css", File.read( "#{FIXTURES}/css_one.compress.css" ) )
     evax.expects( :write_output ).with( "css_two.css", File.read( "#{FIXTURES}/css_two.compress.css" ) )
 
     evax.build_css
   end
 
+  def test_build_only_css_if_js_not_configured
+    evax = Evax.new( "#{FIXTURES}/assets_without_javascripts.yml", "#{File.dirname(__FILE__)}/.." )
+
+    evax.expects( :write_output ).with( "css_one.css", File.read( "#{FIXTURES}/css_one.compress.css" ) )
+    evax.expects( :write_output ).with( "css_two.css", File.read( "#{FIXTURES}/css_two.compress.css" ) )
+
+    evax.build
+  end
+
+  def test_build_only_js_if_css_not_configured
+    evax = Evax.new( "#{FIXTURES}/assets_without_stylesheets.yml", "#{File.dirname(__FILE__)}/.." )
+
+    evax.expects( :write_output ).with( "js_one.js", File.read( "#{FIXTURES}/js_one.compress.js" ) )
+    evax.expects( :write_output ).with( "js_two.js", File.read( "#{FIXTURES}/js_two.compress.js" ) )
+
+    evax.build
+  end
+
   def test_build
-    evax = Evax.new
+    evax = Evax.new( "#{FIXTURES}/assets.yml", "#{File.dirname(__FILE__)}/.." )
     evax.expects( :build_js )
     evax.expects( :build_css )
 
