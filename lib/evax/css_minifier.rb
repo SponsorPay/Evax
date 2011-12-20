@@ -3,18 +3,16 @@
 module Evax::CssMinifier
 
   def self.build(css_string)
-    css_string.split("}").map do |block|
-      block.gsub!(/\n/," ")
-      block.gsub!(/\/\*.*?\*\//m,"")
-      block.gsub!(/\s*:\s*/, ":")
-      block.gsub!(/\s*;\s*/, ";")
-      block.gsub!(/\s*,\s*/, ",")
-      block.gsub!(/\s*\{\s*/, "{")
-      block.gsub!(/\s\s+/, " ")
-      block.gsub!(/\s!important/, "!important")
-
-      block.strip + "}" if block.include?("{")
-    end.join("").gsub!(/;\}/, "}")
+    css_string.gsub!(/\n/," ")
+    css_string.gsub!(/\/\*.*?\*\//m,"")
+    css_string.gsub!(/\s*:\s*/, ":")
+    css_string.gsub!(/\s*;\s*/, ";")
+    css_string.gsub!(/\s*,\s*/, ",")
+    css_string.gsub!(/\s*\{\s*/, "{")
+    css_string.gsub!(/\s\s+/, " ")
+    css_string.gsub!(/^\s*/, "")
+    css_string.gsub!(/\s!important/, "!important")
+    css_string.gsub!(/;\s*\}\s*/, "}")
   end
 
 end

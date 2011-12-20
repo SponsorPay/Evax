@@ -11,33 +11,37 @@ Create a YAML file describing assets, Evax will take it and compress the javascr
 
 ## Instalation
 
-     gem install evax
+    gem install evax
+     
+## Dependencies
+
+As *Evax* has a dependency in *uglifier* who has a dependency in *execjs* it is needed to have a proper **JS runtime** installed in your system. Pick one from the [execjs README page](https://github.com/sstephenson/execjs)
 
 ## Usage
 
 ### assets.yml
 
-     output_path: tmp/
+    output_path: tmp/
 
-     javascripts:
-       js_package_one:
-         - test/fixtures/javascripts/one.js
-         - test/fixtures/javascripts/two.js
-         - test/fixtures/javascripts/three.js
-       js_package_two:
-         - test/fixtures/javascripts/four.js
+    javascripts:
+      js_package_one:
+        - test/fixtures/javascripts/one.js
+        - test/fixtures/javascripts/two.js
+        - test/fixtures/javascripts/three.js
+      js_package_two:
+        - test/fixtures/javascripts/four.js
 
-     stylesheets:
-       css_package_one:
-         - test/fixtures/stylesheets/one.css
-         - test/fixtures/stylesheets/two.css
-       css_package_two:
-         - test/fixtures/stylesheets/three.css
-         - test/fixtures/stylesheets/four.css
+    stylesheets:
+      css_package_one:
+        - test/fixtures/stylesheets/one.css
+        - test/fixtures/stylesheets/two.css
+      css_package_two:
+        - test/fixtures/stylesheets/three.css
+        - test/fixtures/stylesheets/four.css
 
 ### Command Line
 
-      evax /path/to/assets.yml /relative/path
+    evax /path/to/assets.yml /relative/path
 
 ### Rails
 
