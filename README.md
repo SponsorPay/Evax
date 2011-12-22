@@ -1,18 +1,20 @@
 # Evax Assets Compressor
 
 ![Evax compressor logo](http://farm8.staticflickr.com/7166/6505430865_1f9f232e8c_o_d.png)
+
+
 *Evax compressor make you feel lighter*
 
 Evax is a simple asset packaging library for Ruby, providing JavaScript/CSS concatenation and compression using UglifyJS and a really simple regex based CSS compressor. Just because enough is enough.
 
-The idea behind it is to have a really **simple library to compress your assets** in the simplest way without any weird dependency (who said Java?). There are nice assets packaging systems out there but they have too many options for some cases. Sometimes, you just want to play with a pet project.
+The idea behind it is to have a really **simple library to compress your assets** in the simplest way without any weird dependency (who said Java?). There are nice assets packaging systems out there but they have too many options for some cases.
 
 Create a YAML file describing assets, Evax will take it and compress the javascript and stylesheets files to the *output directory* of your choice. Done.
 
 ## Instalation
 
     gem install evax
-     
+
 ## Dependencies
 
 As *Evax* has a dependency in *uglifier* who has a dependency in *execjs* it is needed to have a proper **JS runtime** installed in your system. Pick one from the [execjs README page](https://github.com/sstephenson/execjs)
@@ -21,6 +23,7 @@ As *Evax* has a dependency in *uglifier* who has a dependency in *execjs* it is 
 
 ### assets.yml
 
+    compress:    off # default on
     output_path: tmp/
 
     javascripts:
@@ -41,7 +44,7 @@ As *Evax* has a dependency in *uglifier* who has a dependency in *execjs* it is 
 
 ### Command Line
 
-    evax /path/to/assets.yml /relative/path
+    evax /path/to/assets.yml /base/path
 
 ### Rails
 
@@ -52,10 +55,11 @@ Add **evax** to your Gemfile:
 Create a Rake task for running it, e.g.:
 
     namespace :evax do
+      ASSETS_PATH = "#{Rails.root}/config/assets.yml"
+      BASE_PATH   = Rails.root
+
       desc 'Build assets'
       task :build do
-        ASSETS_PATH   = "#{Rails.root}/config/assets.yml"
-        RELATIVE_PATH = Rails.root
-        Evax.new( ASSETS_PATH, RELATIVE_PATH ).build
+        Evax.new( ASSETS_PATH, BASE_PATH ).build
       end
     end
