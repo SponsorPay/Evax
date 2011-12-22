@@ -17,7 +17,8 @@ class Evax
   end
 
   def config
-    YAML::load_file( @config_file )
+    default_opts = { "compress" => true }
+    default_opts.merge(YAML::load_file( @config_file ))
   end
 
   def join( type, group_name )
@@ -33,19 +34,19 @@ class Evax
 
   def build_js
     config["javascripts"].each_key do |group_name|
-      join_string     = join( :javascripts, group_name )
-      compress_string = Evax.compress_js( join_string )
+      result_string = join( :javascripts, group_name )
+      result_string = Evax.compress_js( result_string ) if config["compress"]
 
-      write_output( "#{group_name}.js", compress_string )
+      write_output( "#{group_name}.js", result_string )
     end
   end
 
   def build_css
     config["stylesheets"].each_key do |group_name|
-      join_string     = join( :stylesheets, group_name )
-      compress_string = Evax.compress_css( join_string )
+      result_string = join( :stylesheets, group_name )
+      result_string = Evax.compress_css( result_string ) if config["compress"]
 
-      write_output( "#{group_name}.css", compress_string )
+      write_output( "#{group_name}.css", result_string )
     end
   end
 

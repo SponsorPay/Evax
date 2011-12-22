@@ -1,3 +1,3 @@
 /* This is the JS ONE */
-function js_one(){  
+function js_one(){
 }

@@ -1,3 +1,4 @@
+compress:    on
 output_path: tmp/
 
 javascripts:

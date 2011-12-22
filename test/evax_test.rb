@@ -14,7 +14,18 @@ class EvaxTest < Test::Unit::TestCase
   def test_read_config_file
     evax = Evax.new( "#{FIXTURES}/assets.yml")
     assert_equal( "tmp/", evax.config["output_path"] )
+    assert_equal( true, evax.config["compress"] )
     assert_equal( 2, evax.config["javascripts"].size )
+  end
+
+  def test_read_config_file_compress_on
+    evax = Evax.new( "#{FIXTURES}/assets_compress_on.yml")
+    assert_equal( true, evax.config["compress"] )
+  end
+
+  def test_read_config_file_compress_off
+    evax = Evax.new( "#{FIXTURES}/assets_compress_off.yml")
+    assert_equal( false, evax.config["compress"] )
   end
 
   def test_join
@@ -71,10 +82,28 @@ class EvaxTest < Test::Unit::TestCase
     evax.build_js
   end
 
+  def test_build_js_compress_off
+    evax = Evax.new( "#{FIXTURES}/assets_compress_off.yml", "#{File.dirname(__FILE__)}/.." )
+    Evax.expects( :compress_js ).never
+    evax.expects( :write_output ).with( "js_one.js", File.read( "#{FIXTURES}/js_one.compress_off.js" ) )
+    evax.expects( :write_output ).with( "js_two.js", File.read( "#{FIXTURES}/js_two.compress_off.js" ) )
+
+    evax.build_js
+  end
+
   def test_build_css
     evax = Evax.new( "#{FIXTURES}/assets.yml", "#{File.dirname(__FILE__)}/.." )
     evax.expects( :write_output ).with( "css_one.css", File.read( "#{FIXTURES}/css_one.compress.css" ) )
     evax.expects( :write_output ).with( "css_two.css", File.read( "#{FIXTURES}/css_two.compress.css" ) )
+
+    evax.build_css
+  end
+
+  def test_build_css_off
+    evax = Evax.new( "#{FIXTURES}/assets_compress_off.yml", "#{File.dirname(__FILE__)}/.." )
+    Evax.expects( :compress_css ).never
+    evax.expects( :write_output ).with( "css_one.css", File.read( "#{FIXTURES}/css_one.compress_off.css" ) )
+    evax.expects( :write_output ).with( "css_two.css", File.read( "#{FIXTURES}/css_two.compress_off.css" ) )
 
     evax.build_css
   end
