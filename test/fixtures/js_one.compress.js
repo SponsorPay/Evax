@@ -1,1 +1,1 @@
-function js_one(){}function js_two(){}function js_three(){}
+function js_one(){}function js_two(){}function js_three(){};

@@ -1,1 +1,1 @@
-function js_four(){}
+function js_four(){};
