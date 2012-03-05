@@ -11,8 +11,19 @@ rescue LoadError
 end
 
 if ( ARGV.size < 2 )
-  Evax::Logger.log "use: $ evax <config_file_path> <relative_path>"
+  usage = "Usage:\n"\
+    "$ evax <config_file_path> <relative_path> [<options>]\n"\
+    "options:\n"\
+    "\t-w\t- watch assets for changes and rebuild when necessary"
+  Evax::Logger.log usage
   exit 1
 end
 
-Evax.new( ARGV[0], ARGV[1] ).build
+evax = Evax.new( ARGV[0], ARGV[1] )
+options = ARGV[2..-1]
+
+if options.include?("-w")
+  evax.run_as_daemon
+else
+  evax.run_once
+end
