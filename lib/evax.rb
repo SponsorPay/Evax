@@ -83,7 +83,7 @@ class Evax
 
   def build_assets( asset_type, group_names=[] )
     groups = config[asset_type.name]
-    groups.select! {|k, v| group_names.include? k } if group_names.any?
+    groups = groups.select {|k, v| group_names.include? k } if group_names.any?
 
     groups.each_key do |group_name|
       result_string = join( asset_type.name, group_name )
