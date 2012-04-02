@@ -1,10 +1,9 @@
 require "yaml"
-require "uglifier"
 require "watchr"
 
 require_relative "evax/version"
-require_relative "evax/css_minifier"
 require_relative "evax/logger"
+require_relative "evax/asset_type"
 
 class Evax
   attr_reader :config_file, :relative_path
@@ -37,39 +36,29 @@ class Evax
   end
 
   def build
-    build_js  if js_configured?
-    build_css if css_configured?
+    AssetType.all.each {|type| build_assets( type ) if type_configured?( type.name ) }
   end
 
   def watch
     script = Watchr::Script.new
-    script.watch( asset_files_regex(:javascripts) ) {|asset| build_js( js_groups_for( asset[0] ) ) } if js_configured?
-    script.watch( asset_files_regex(:stylesheets) ) {|asset| build_css( css_groups_for( asset[0] ) ) } if css_configured?
+
+    AssetType.all.each do |type|
+      if type_configured?( type.name )
+        script.watch( asset_files_regex( type.name ) ) do |asset|
+          build_assets( type, filter_groups_by_file( type.name, asset[0] ) )
+        end
+      end
+    end
+
     Watchr::Controller.new( script, Watchr.handler.new ).run
   end
 
   def build_js( group_names=[] )
-    groups = config["javascripts"]
-    groups.select!{|k, v| group_names.include? k } if group_names.any?
-
-    groups.each_key do |group_name|
-      result_string = join( :javascripts, group_name )
-      result_string = Evax.compress_js( result_string ) if config["compress"]
-
-      write_output( "#{group_name}.js", result_string )
-    end
+    build_assets( AssetType::Javascript, group_names )
   end
 
   def build_css( group_names=[] )
-    groups = config["stylesheets"]
-    groups.select!{|k, v| group_names.include? k } if group_names.any?
-
-    groups.each_key do |group_name|
-      result_string = join( :stylesheets, group_name )
-      result_string = Evax.compress_css( result_string ) if config["compress"]
-
-      write_output( "#{group_name}.css", result_string )
-    end
+    build_assets( AssetType::Stylesheet, group_names )
   end
 
   def write_output( file_name, string )
@@ -83,38 +72,37 @@ class Evax
   end
 
   def self.compress_js( js_string )
-    opts = { :copyright => false }
-    Uglifier.compile( js_string, opts )
+    AssetType::Javascript.compress( js_string )
   end
 
   def self.compress_css( css_string )
-    Evax::CssMinifier.build( css_string )
+    AssetType::Stylesheet.compress( css_string )
   end
 
   private
 
-  def js_configured?
-    !config["javascripts"].nil?
+  def build_assets( asset_type, group_names=[] )
+    groups = config[asset_type.name]
+    groups.select! {|k, v| group_names.include? k } if group_names.any?
+
+    groups.each_key do |group_name|
+      result_string = join( asset_type.name, group_name )
+      result_string = asset_type.compress( result_string ) if config["compress"]
+
+      write_output( "#{group_name}.#{asset_type.file_extension}", result_string )
+    end
   end
 
-  def css_configured?
-    !config["stylesheets"].nil?
+  def type_configured?( type_name )
+    !config[type_name].nil?
   end
 
-  def asset_files_regex(type)
-    config[type.to_s].values.flatten.uniq.map {|path| Regexp.quote( path ) }.join( "|" )
+  def asset_files_regex( type_name )
+    config[type_name].values.flatten.uniq.map {|path| Regexp.quote( path ) }.join( "|" )
   end
 
-  def js_groups_for( file )
-    filter_groups_by_file( :javascripts, file )
-  end
-
-  def css_groups_for( file )
-    filter_groups_by_file( :stylesheets, file )
-  end
-
-  def filter_groups_by_file(type, file)
-    config[type.to_s].select {|k, v| v.include? file }.keys
+  def filter_groups_by_file( type_name, file )
+    config[type_name].select {|k, v| v.include? file }.keys
   end
 
 end
