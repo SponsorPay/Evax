@@ -46,6 +46,12 @@ As *Evax* has a dependency in *uglifier* who has a dependency in *execjs* it is 
 
     evax /path/to/assets.yml /base/path
 
+or, for _watchr_ mode:
+
+    evax /path/to/assets.yml /base/path -w
+
+In _watchr_ mode if any asset file is changed the group will be recompressed authomatically.
+
 ### Rails
 
 Add **evax** to your Gemfile:
