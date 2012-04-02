@@ -30,9 +30,9 @@ class Evax
     default_opts.merge(YAML::load_file( @config_file ))
   end
 
-  def join( type, group_name )
-    config[type.to_s][group_name].map do |file_path|
-      File.read( File.join(relative_path, file_path) )
+  def join( type_name, group_name )
+    config[type_name.to_s][group_name].map do |file_path|
+      File.read( File.join( relative_path, file_path ) )
     end.join( "\n" )
   end
 
