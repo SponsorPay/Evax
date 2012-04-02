@@ -74,12 +74,19 @@ class EvaxTest < Test::Unit::TestCase
     end
   end
 
-  def test_build_js
+  def test_build_js_all_groups
     evax = Evax.new( "#{FIXTURES}/assets.yml", "#{File.dirname(__FILE__)}/.." )
     evax.expects( :write_output ).with( "js_one.js", File.read( "#{FIXTURES}/js_one.compress.js" ) )
     evax.expects( :write_output ).with( "js_two.js", File.read( "#{FIXTURES}/js_two.compress.js" ) )
 
     evax.build_js
+  end
+
+  def test_build_js_selected_groups
+    evax = Evax.new( "#{FIXTURES}/assets.yml", "#{File.dirname(__FILE__)}/.." )
+    evax.expects( :write_output ).with( "js_one.js", File.read( "#{FIXTURES}/js_one.compress.js" ) ).once
+
+    evax.build_js(["js_one"])
   end
 
   def test_build_js_compress_off
@@ -91,12 +98,19 @@ class EvaxTest < Test::Unit::TestCase
     evax.build_js
   end
 
-  def test_build_css
+  def test_build_css_all_groups
     evax = Evax.new( "#{FIXTURES}/assets.yml", "#{File.dirname(__FILE__)}/.." )
     evax.expects( :write_output ).with( "css_one.css", File.read( "#{FIXTURES}/css_one.compress.css" ) )
     evax.expects( :write_output ).with( "css_two.css", File.read( "#{FIXTURES}/css_two.compress.css" ) )
 
     evax.build_css
+  end
+
+  def test_build_css_selected_groups
+    evax = Evax.new( "#{FIXTURES}/assets.yml", "#{File.dirname(__FILE__)}/.." )
+    evax.expects( :write_output ).with( "css_one.css", File.read( "#{FIXTURES}/css_one.compress.css" ) ).once
+
+    evax.build_css(["css_one"])
   end
 
   def test_build_css_off
@@ -132,6 +146,22 @@ class EvaxTest < Test::Unit::TestCase
     evax.expects( :build_css )
 
     evax.build
+  end
+
+  def test_watch
+    evax = Evax.new( "#{FIXTURES}/assets.yml", "#{File.dirname(__FILE__)}/.." )
+    Watchr::Controller.any_instance.stubs(:run)
+
+    watchr = mock()
+    Watchr::Script.stubs(:new => watchr)
+    watchr.expects(:watch).with do |pattern, block|
+      pattern == "test/fixtures/javascripts/one\\.js|test/fixtures/javascripts/two\\.js|test/fixtures/javascripts/three\\.js|test/fixtures/javascripts/four\\.js"
+    end
+    watchr.expects(:watch).with do |pattern, block|
+      pattern == "test/fixtures/stylesheets/one\\.css|test/fixtures/stylesheets/two\\.css|test/fixtures/stylesheets/three\\.css|test/fixtures/stylesheets/four\\.css"
+    end
+
+    evax.watch
   end
 
 end

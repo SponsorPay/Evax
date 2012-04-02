@@ -1,5 +1,6 @@
 require "yaml"
 require "uglifier"
+require "watchr"
 
 require_relative "evax/version"
 require_relative "evax/css_minifier"
@@ -14,6 +15,14 @@ class Evax
 
     Evax::Logger.log "Config File: #{self.config_file}"
     Evax::Logger.log "Relative Path: #{self.relative_path}"
+  end
+
+  def run_once
+    build
+  end
+
+  def run_as_daemon
+    watch
   end
 
   def config
@@ -32,8 +41,18 @@ class Evax
     build_css if css_configured?
   end
 
-  def build_js
-    config["javascripts"].each_key do |group_name|
+  def watch
+    script = Watchr::Script.new
+    script.watch( asset_files_regex(:javascripts) ) {|asset| build_js( js_groups_for( asset[0] ) ) } if js_configured?
+    script.watch( asset_files_regex(:stylesheets) ) {|asset| build_css( css_groups_for( asset[0] ) ) } if css_configured?
+    Watchr::Controller.new( script, Watchr.handler.new ).run
+  end
+
+  def build_js( group_names=[] )
+    groups = config["javascripts"]
+    groups.select!{|k, v| group_names.include? k } if group_names.any?
+
+    groups.each_key do |group_name|
       result_string = join( :javascripts, group_name )
       result_string = Evax.compress_js( result_string ) if config["compress"]
 
@@ -41,8 +60,11 @@ class Evax
     end
   end
 
-  def build_css
-    config["stylesheets"].each_key do |group_name|
+  def build_css( group_names=[] )
+    groups = config["stylesheets"]
+    groups.select!{|k, v| group_names.include? k } if group_names.any?
+
+    groups.each_key do |group_name|
       result_string = join( :stylesheets, group_name )
       result_string = Evax.compress_css( result_string ) if config["compress"]
 
@@ -77,6 +99,22 @@ class Evax
 
   def css_configured?
     !config["stylesheets"].nil?
+  end
+
+  def asset_files_regex(type)
+    config[type.to_s].values.flatten.uniq.map {|path| Regexp.quote( path ) }.join( "|" )
+  end
+
+  def js_groups_for( file )
+    filter_groups_by_file( :javascripts, file )
+  end
+
+  def css_groups_for( file )
+    filter_groups_by_file( :stylesheets, file )
+  end
+
+  def filter_groups_by_file(type, file)
+    config[type.to_s].select {|k, v| v.include? file }.keys
   end
 
 end
