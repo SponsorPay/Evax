@@ -142,8 +142,8 @@ class EvaxTest < Test::Unit::TestCase
 
   def test_build
     evax = Evax.new( "#{FIXTURES}/assets.yml", "#{File.dirname(__FILE__)}/.." )
-    evax.expects( :build_js )
-    evax.expects( :build_css )
+    evax.expects( :build_assets ).with( AssetType::Javascript )
+    evax.expects( :build_assets ).with( AssetType::Stylesheet )
 
     evax.build
   end
