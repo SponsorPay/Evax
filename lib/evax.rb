@@ -49,12 +49,14 @@ class Evax
   end
 
   def build_js( group_names=[] )
+    options = symbolize_hash( config["options"] || {} )
+
     groups = config["javascripts"]
     groups.select!{|k, v| group_names.include? k } if group_names.any?
 
     groups.each_key do |group_name|
       result_string = join( :javascripts, group_name )
-      result_string = Evax.compress_js( result_string ) if config["compress"]
+      result_string = Evax.compress_js( result_string, options ) if config["compress"]
 
       write_output( "#{group_name}.js", result_string )
     end
@@ -82,8 +84,8 @@ class Evax
     File.open( file_path, 'w' ) { |f| f.write string }
   end
 
-  def self.compress_js( js_string )
-    opts = { :copyright => false }
+  def self.compress_js( js_string, options = {} )
+    opts = { :copyright => false }.merge!( options )
     Uglifier.compile( js_string, opts )
   end
 
@@ -92,6 +94,13 @@ class Evax
   end
 
   private
+
+  def symbolize_hash(hash)
+    hash.inject({}) do |symbol_hash, (k,v)|
+      symbol_hash[k.to_sym] = v.is_a?(Hash) ? symbolize_hash(v) : v
+      symbol_hash
+    end
+  end
 
   def js_configured?
     !config["javascripts"].nil?

@@ -59,6 +59,14 @@ class EvaxTest < Test::Unit::TestCase
     assert_equal( File.read( "#{FIXTURES}/js_one.compress.js" ), result)
   end
 
+  def test_compress_js_receives_options
+    evax = Evax.new( "#{FIXTURES}/assets.yml", "#{File.dirname(__FILE__)}/.." )
+    Evax.expects( :compress_js ).at_least_once.with do |js, opts|
+      opts == { :max_line_length => 800 }
+    end
+    evax.build_js
+  end
+
   def test_compress_css
     result = Evax.compress_css( File.read( "#{FIXTURES}/css_one.css" ) )
 

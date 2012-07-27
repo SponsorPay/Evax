@@ -1,5 +1,6 @@
 output_path: tmp/
-
+options:
+  max_line_length: 800
 javascripts:
   js_one:
     - test/fixtures/javascripts/one.js
