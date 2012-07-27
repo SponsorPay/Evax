@@ -1,6 +1,8 @@
 output_path: tmp/
 options:
   max_line_length: 800
+  beautify_options:
+    indent_level: 4
 javascripts:
   js_one:
     - test/fixtures/javascripts/one.js

@@ -60,9 +60,12 @@ class EvaxTest < Test::Unit::TestCase
   end
 
   def test_compress_js_receives_options
+    
     evax = Evax.new( "#{FIXTURES}/assets.yml", "#{File.dirname(__FILE__)}/.." )
     Evax.expects( :compress_js ).at_least_once.with do |js, opts|
-      opts == { :max_line_length => 800 }
+      opts == { :max_line_length => 800,
+                :beautify_options => 
+                  { :indent_level => 4 }}
     end
     evax.build_js
   end
