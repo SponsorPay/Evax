@@ -28,6 +28,11 @@ class EvaxTest < Test::Unit::TestCase
     assert_equal( false, evax.config["compress"] )
   end
 
+  def test_read_config_file_compiled_datetime
+    evax = Evax.new( "#{FIXTURES}/assets_compiled_datetime.yml")
+    assert_equal( true, evax.config["compiled_datetime"] )
+  end
+
   def test_join
     evax = Evax.new( "#{FIXTURES}/assets.yml", "/wadus" )
 
