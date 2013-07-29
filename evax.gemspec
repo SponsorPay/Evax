@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
 
   s.rubyforge_project = "evax"
 
-  s.add_development_dependency "bundler",   "1.1.0"
+  s.add_development_dependency "bundler",   "1.3.5"
   s.add_development_dependency "rake",      "0.9.2.2"
   s.add_development_dependency "mocha",     "0.10.0"
   s.add_development_dependency "delorean",  "1.1.1"
