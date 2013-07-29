@@ -28,6 +28,11 @@ class EvaxTest < Test::Unit::TestCase
     assert_equal( false, evax.config["compress"] )
   end
 
+  def test_read_config_file_compiled_datetime
+    evax = Evax.new( "#{FIXTURES}/assets_compiled_datetime.yml")
+    assert_equal( true, evax.config["compiled_datetime"] )
+  end
+
   def test_join
     evax = Evax.new( "#{FIXTURES}/assets.yml", "/wadus" )
 
@@ -57,6 +62,17 @@ class EvaxTest < Test::Unit::TestCase
     result = Evax.compress_js( File.read( "#{FIXTURES}/js_one.js" ) )
 
     assert_equal( File.read( "#{FIXTURES}/js_one.compress.js" ), result)
+  end
+
+  def test_compress_js_receives_options
+    
+    evax = Evax.new( "#{FIXTURES}/assets.yml", "#{File.dirname(__FILE__)}/.." )
+    Evax.expects( :compress_js ).at_least_once.with do |js, opts|
+      opts == { :max_line_length => 800,
+                :beautify_options => 
+                  { :indent_level => 4 }}
+    end
+    evax.build_js
   end
 
   def test_compress_css
